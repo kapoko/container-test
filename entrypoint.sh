@@ -1,12 +1,17 @@
 #!/bin/ash
 
-# generate host keys if not present
+# Generate host keys if not present
 ssh-keygen -A
 
-if [ ${SSH_PORT:-22} != 22 ]
-then
-  sed -i s/#Port.*/Port\ $SSH_PORT/ /etc/ssh/sshd_config
+# Change port if set
+if [ ${SSH_PORT:-22} != 22 ]; then
+    sed -i s/#Port.*/Port\ $SSH_PORT/ /etc/ssh/sshd_config
 fi
 
-# do not detach (-D), log to stderr (-e), passthrough other arguments
+# Change password if set
+if [ ${ROOT_PASSWORD:-"root"} != "root" ]; then
+    echo "root:$ROOT_PASSWORD" | chpasswd
+fi
+
+# Do not detach (-D), log to stderr (-e), passthrough other arguments
 exec /usr/sbin/sshd -D -e "$@"
