@@ -1,7 +1,7 @@
 #!/bin/ash
 
 # Generate host keys if not present
-ssh-keygen -t ecdsa -f ~/.ssh/id_ecdsa -q -N ""
+echo "n" | ssh-keygen -t ecdsa -f ~/.ssh/id_ecdsa -q -N ""
 
 # Change port if set
 if [ ${SSH_PORT:-22} != 22 ]; then
